@@ -1,0 +1,7 @@
+body{margin:0;background:#F3F6F5}
+button{font-family:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #0F766E;outline-offset:2px}
+.card{background:#fff;border:1px solid #D8E2DF;border-radius:16px}
+.btn{min-height:44px;padding:0 18px;border-radius:12px;border:1px solid #D8E2DF;background:#fff;color:#14312D;font-size:15px;font-weight:600}
+.field{min-height:44px;box-sizing:border-box;width:100%;padding:0 12px;border-radius:12px;border:1px solid #B9C9C5;background:#fff;color:#14312D;font-family:inherit;font-size:15px}
+.lbl{display:block;font-size:13px;font-weight:600;color:#5B6F6B;margin-bottom:6px}

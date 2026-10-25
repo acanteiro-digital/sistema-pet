@@ -1,0 +1,13 @@
+{
+  "name": "sistema-pet",
+  "version": "0.1.0",
+  "private": true,
+  "description": "PetClubinho – protótipo clicável do sistema de controle administrativo (adestramento, day care, creche, hotel).",
+  "scripts": {
+    "build": "esbuild src/main.js --bundle --minify --loader:.html=text --outfile=public/app.js",
+    "dev": "esbuild src/main.js --bundle --loader:.html=text --outfile=public/app.js --servedir=public --serve=8080"
+  },
+  "devDependencies": {
+    "esbuild": "^0.24.0"
+  }
+}
