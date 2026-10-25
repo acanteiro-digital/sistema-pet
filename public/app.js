@@ -41,7 +41,7 @@ Qualquer d\xFAvida, \xE9 s\xF3 responder aqui. Obrigado!`,canSend:G==="rascunho"
             <span style="background:#E8EEEC;color:#41544F;font-weight:700;padding:8px 14px;border-radius:999px;font-size:14px">{{cntN}} a marcar</span>
           </div>
         </div>
-        <details open style="background:#fff;border:1px solid #D8E2DF;border-radius:16px;padding:4px 20px">
+        <details style="background:#fff;border:1px solid #D8E2DF;border-radius:16px;padding:4px 20px">
           <summary style="cursor:pointer;min-height:44px;display:flex;align-items:center;font-size:15px;font-weight:700;color:#0B5A53">Como usar: Hoje</summary>
           <ol style="margin:0 0 14px;padding-left:20px;display:flex;flex-direction:column;gap:8px;font-size:15px;line-height:1.5;color:#2A3F3B">
 <li>Use as setas <b>Anterior</b> e <b>Pr\xF3ximo</b> para escolher o dia. Cada dia mostra os c\xE3es com aula de adestramento agendada (dia e hora fixos do cadastro), mais o day care e a creche.</li>
@@ -163,7 +163,7 @@ Qualquer d\xFAvida, \xE9 s\xF3 responder aqui. Obrigado!`,canSend:G==="rascunho"
           <h1 style="margin:0;font-size:28px;letter-spacing:-0.02em">Hotel</h1>
           <p style="margin:4px 0 0;color:#5B6F6B;font-size:15px">24 de outubro a 6 de novembro \xB7 toque numa reserva para ver os detalhes</p>
         </div>
-        <details open style="background:#fff;border:1px solid #D8E2DF;border-radius:16px;padding:4px 20px">
+        <details style="background:#fff;border:1px solid #D8E2DF;border-radius:16px;padding:4px 20px">
           <summary style="cursor:pointer;min-height:44px;display:flex;align-items:center;font-size:15px;font-weight:700;color:#0B5A53">Como usar: Hotel</summary>
           <ol style="margin:0 0 14px;padding-left:20px;display:flex;flex-direction:column;gap:8px;font-size:15px;line-height:1.5;color:#2A3F3B">
 <li>O calend\xE1rio mostra as baias e os dias. Barra cheia \xE9 c\xE3o <b>hospedado</b>, tracejada \xE9 <b>reservado</b> e cinza \xE9 quem j\xE1 <b>saiu</b>. Na \xFAltima linha aparece a ocupa\xE7\xE3o de cada dia.</li>
@@ -281,7 +281,7 @@ Qualquer d\xFAvida, \xE9 s\xF3 responder aqui. Obrigado!`,canSend:G==="rascunho"
           <h1 style="margin:0;font-size:28px;letter-spacing:-0.02em">Fechamento de outubro</h1>
           <p style="margin:4px 0 0;color:#5B6F6B;font-size:15px">Extratos gerados do que foi registrado no m\xEAs \xB7 vencimento dia 10</p>
         </div>
-        <details open style="background:#fff;border:1px solid #D8E2DF;border-radius:16px;padding:4px 20px">
+        <details style="background:#fff;border:1px solid #D8E2DF;border-radius:16px;padding:4px 20px">
           <summary style="cursor:pointer;min-height:44px;display:flex;align-items:center;font-size:15px;font-weight:700;color:#0B5A53">Como usar: Fechamento</summary>
           <ol style="margin:0 0 14px;padding-left:20px;display:flex;flex-direction:column;gap:8px;font-size:15px;line-height:1.5;color:#2A3F3B">
 <li>Entre os dias 1 e 3, veja no topo os totais do m\xEAs: total, recebido, aguardando pagamento e a enviar. Depois escolha um tutor na lista.</li>
@@ -359,7 +359,7 @@ Qualquer d\xFAvida, \xE9 s\xF3 responder aqui. Obrigado!`,canSend:G==="rascunho"
           </div>
           <button onClick="{{toggleForm}}" style="min-height:48px;padding:0 22px;border-radius:12px;border:0;background:{{accent}};color:#fff;font-size:16px;font-weight:700">{{formBtn}}</button>
         </div>
-        <details open style="background:#fff;border:1px solid #D8E2DF;border-radius:16px;padding:4px 20px">
+        <details style="background:#fff;border:1px solid #D8E2DF;border-radius:16px;padding:4px 20px">
           <summary style="cursor:pointer;min-height:44px;display:flex;align-items:center;font-size:15px;font-weight:700;color:#0B5A53">Como usar: C\xE3es e tutores</summary>
           <ol style="margin:0 0 14px;padding-left:20px;display:flex;flex-direction:column;gap:8px;font-size:15px;line-height:1.5;color:#2A3F3B">
 <li>Para cadastrar, toque em <b>+ Novo c\xE3o</b> e preencha o nome do c\xE3o, o tutor e o WhatsApp (usado no envio da cobran\xE7a).</li>
@@ -452,7 +452,7 @@ Qualquer d\xFAvida, \xE9 s\xF3 responder aqui. Obrigado!`,canSend:G==="rascunho"
           </div>
           <button onClick="{{toggleSv}}" style="min-height:48px;padding:0 22px;border-radius:12px;border:0;background:{{accent}};color:#fff;font-size:16px;font-weight:700">{{svBtn}}</button>
         </div>
-        <details open style="background:#fff;border:1px solid #D8E2DF;border-radius:16px;padding:4px 20px">
+        <details style="background:#fff;border:1px solid #D8E2DF;border-radius:16px;padding:4px 20px">
           <summary style="cursor:pointer;min-height:44px;display:flex;align-items:center;font-size:15px;font-weight:700;color:#0B5A53">Como usar: Servi\xE7os e pre\xE7os</summary>
           <ol style="margin:0 0 14px;padding-left:20px;display:flex;flex-direction:column;gap:8px;font-size:15px;line-height:1.5;color:#2A3F3B">
 <li>A lista mostra cada servi\xE7o, como ele \xE9 cobrado e o valor. Para mudar um pre\xE7o, edite o valor direto no campo.</li>
@@ -517,7 +517,7 @@ Qualquer d\xFAvida, \xE9 s\xF3 responder aqui. Obrigado!`,canSend:G==="rascunho"
           </div>
           <button onClick="{{doExport}}" class="btn">Exportar para Excel / Sheets</button>
         </div>
-        <details open style="background:#fff;border:1px solid #D8E2DF;border-radius:16px;padding:4px 20px">
+        <details style="background:#fff;border:1px solid #D8E2DF;border-radius:16px;padding:4px 20px">
           <summary style="cursor:pointer;min-height:44px;display:flex;align-items:center;font-size:15px;font-weight:700;color:#0B5A53">Como usar: Dashboard</summary>
           <ol style="margin:0 0 14px;padding-left:20px;display:flex;flex-direction:column;gap:8px;font-size:15px;line-height:1.5;color:#2A3F3B">
 <li>Escolha o per\xEDodo em <b>De</b> e <b>At\xE9</b>, ou use os atalhos: Este m\xEAs, M\xEAs passado, \xDAltimos 90 dias e Tudo.</li>
@@ -607,7 +607,7 @@ Qualquer d\xFAvida, \xE9 s\xF3 responder aqui. Obrigado!`,canSend:G==="rascunho"
             <span style="background:#DDF1EE;color:#0B5A53;font-weight:700;padding:8px 14px;border-radius:999px;font-size:14px">{{doneCount}} respondidas</span>
           </div>
         </div>
-        <details open style="background:#fff;border:1px solid #D8E2DF;border-radius:16px;padding:4px 20px">
+        <details style="background:#fff;border:1px solid #D8E2DF;border-radius:16px;padding:4px 20px">
           <summary style="cursor:pointer;min-height:44px;display:flex;align-items:center;font-size:15px;font-weight:700;color:#0B5A53">Como usar: D\xFAvidas</summary>
           <ol style="margin:0 0 14px;padding-left:20px;display:flex;flex-direction:column;gap:8px;font-size:15px;line-height:1.5;color:#2A3F3B">
 <li>Cada cart\xE3o \xE9 uma decis\xE3o que s\xF3 o administrador pode tomar. Toque numa resposta r\xE1pida ou escreva a sua e toque em <b>Salvar resposta</b>.</li>
