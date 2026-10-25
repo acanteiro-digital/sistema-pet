@@ -35,6 +35,18 @@
             <span style="background:#E8EEEC;color:#41544F;font-weight:700;padding:8px 14px;border-radius:999px;font-size:14px">{{cntN}} a marcar</span>
           </div>
         </div>
+        <details open style="background:#fff;border:1px solid #D8E2DF;border-radius:16px;padding:4px 20px">
+          <summary style="cursor:pointer;min-height:44px;display:flex;align-items:center;font-size:15px;font-weight:700;color:#0B5A53">Como usar: Hoje</summary>
+          <ol style="margin:0 0 14px;padding-left:20px;display:flex;flex-direction:column;gap:8px;font-size:15px;line-height:1.5;color:#2A3F3B">
+<li>Use as setas <b>Anterior</b> e <b>Próximo</b> para escolher o dia. Cada dia mostra os cães com aula de adestramento agendada (dia e hora fixos do cadastro), mais o day care e a creche.</li>
+<li>Em cada cão, toque em <b>Presente</b> ou <b>Faltou</b>. Tocar de novo desfaz a marcação.</li>
+<li>Nas aulas de adestramento, escreva em <b>Como foi a aula</b> a observação do dia. Ela substitui o texto que o adestrador enviava.</li>
+<li>Aula extra no mesmo dia: no quadro <b>Aula extra neste dia</b>, escolha o cão, o horário e o foco e toque em <b>Incluir aula extra</b>. Ela entra na lista com a etiqueta Extra.</li>
+<li>Extras (ração, guia, banho): em <b>Lançar extra</b>, escolha o cão e o item, digite o valor e toque em <b>Adicionar extra</b>. Eles entram no fechamento do mês.</li>
+<li>Na creche, cada presença desconta um dia do pacote, e o sistema avisa quando o pacote está acabando.</li>
+          </ol>
+        </details>
+
 
         <div class="card" style="padding:10px 14px;display:flex;align-items:center;justify-content:space-between;gap:12px">
           <button onClick="{{prevDay}}" aria-label="Dia anterior" style="{{prevStyle}}">‹ Anterior</button>
@@ -145,6 +157,17 @@
           <h1 style="margin:0;font-size:28px;letter-spacing:-0.02em">Hotel</h1>
           <p style="margin:4px 0 0;color:#5B6F6B;font-size:15px">24 de outubro a 6 de novembro · toque numa reserva para ver os detalhes</p>
         </div>
+        <details open style="background:#fff;border:1px solid #D8E2DF;border-radius:16px;padding:4px 20px">
+          <summary style="cursor:pointer;min-height:44px;display:flex;align-items:center;font-size:15px;font-weight:700;color:#0B5A53">Como usar: Hotel</summary>
+          <ol style="margin:0 0 14px;padding-left:20px;display:flex;flex-direction:column;gap:8px;font-size:15px;line-height:1.5;color:#2A3F3B">
+<li>O calendário mostra as baias e os dias. Barra cheia é cão <b>hospedado</b>, tracejada é <b>reservado</b> e cinza é quem já <b>saiu</b>. Na última linha aparece a ocupação de cada dia.</li>
+<li>Para registrar a entrada, use <b>Novo check-in</b>: escolha o cão (do cadastro), o dia de entrada, os dias de estadia, a baia e o que ele trouxe, e toque em <b>Registrar check-in</b>.</li>
+<li>Se a entrada for hoje, o cão fica hospedado. Se for em outro dia, fica reservado, e você toca em <b>Confirmar entrada</b> quando ele chegar.</li>
+<li>Toque numa barra do calendário para ver a ficha da reserva: tutor, entrada, saída, diárias e o que ele trouxe.</li>
+<li>No fim do período, na ficha, escolha o dia do check-out e toque em <b>Fazer check-out</b>. As diárias até esse dia vão para a conta do tutor.</li>
+          </ol>
+        </details>
+
         <div style="display:flex;flex-wrap:wrap;gap:20px;align-items:flex-start">
           <div class="card" style="flex:999 1 520px;min-width:0;padding:18px;overflow-x:auto">
             <div style="min-width:780px">
@@ -252,6 +275,17 @@
           <h1 style="margin:0;font-size:28px;letter-spacing:-0.02em">Fechamento de outubro</h1>
           <p style="margin:4px 0 0;color:#5B6F6B;font-size:15px">Extratos gerados do que foi registrado no mês · vencimento dia 10</p>
         </div>
+        <details open style="background:#fff;border:1px solid #D8E2DF;border-radius:16px;padding:4px 20px">
+          <summary style="cursor:pointer;min-height:44px;display:flex;align-items:center;font-size:15px;font-weight:700;color:#0B5A53">Como usar: Fechamento</summary>
+          <ol style="margin:0 0 14px;padding-left:20px;display:flex;flex-direction:column;gap:8px;font-size:15px;line-height:1.5;color:#2A3F3B">
+<li>Entre os dias 1 e 3, veja no topo os totais do mês: total, recebido, aguardando pagamento e a enviar. Depois escolha um tutor na lista.</li>
+<li>O extrato mostra tudo que foi lançado no mês para aquele tutor (aulas, diárias, pacotes e extras) e o total.</li>
+<li>Toque em <b>Enviar no WhatsApp</b>: abre a conversa com o tutor com a mensagem pronta, no computador e no celular. O extrato passa a <b>Aguardando</b>.</li>
+<li>Quando o Pix chegar, toque em <b>Marcar como pago</b>. O vencimento é dia 10. Para quem não pagou, use <b>Reenviar lembrete</b>.</li>
+<li>Use <b>Exportar fechamento</b> para guardar o mês em Excel ou Google Sheets, com as abas Detalhes, Fechamento e Dashboard. Na prévia, o botão só mostra o que o arquivo teria.</li>
+          </ol>
+        </details>
+
         <div style="display:flex;flex-wrap:wrap;align-items:center;gap:12px">
           <button onClick="{{doExportFech}}" class="btn">Exportar fechamento (Excel / Sheets)</button>
           <sc-if value="{{hasExMsg}}" hint-placeholder-val="{{false}}"><span role="status" style="color:#0B5A53;font-size:14px;font-weight:600">{{exMsg}}</span></sc-if>
@@ -319,6 +353,16 @@
           </div>
           <button onClick="{{toggleForm}}" style="min-height:48px;padding:0 22px;border-radius:12px;border:0;background:{{accent}};color:#fff;font-size:16px;font-weight:700">{{formBtn}}</button>
         </div>
+        <details open style="background:#fff;border:1px solid #D8E2DF;border-radius:16px;padding:4px 20px">
+          <summary style="cursor:pointer;min-height:44px;display:flex;align-items:center;font-size:15px;font-weight:700;color:#0B5A53">Como usar: Cães e tutores</summary>
+          <ol style="margin:0 0 14px;padding-left:20px;display:flex;flex-direction:column;gap:8px;font-size:15px;line-height:1.5;color:#2A3F3B">
+<li>Para cadastrar, toque em <b>+ Novo cão</b> e preencha o nome do cão, o tutor e o WhatsApp (usado no envio da cobrança).</li>
+<li>Marque todos os serviços que o cão contrata. Pode ser mais de um (por exemplo, creche e adestramento).</li>
+<li>Se marcar Adestramento, escolha os dias da semana fixos e o horário de cada dia (de 08:00 a 18:00). Eles formam a agenda fixa do cão.</li>
+<li>Para achar um cão, busque pelo nome do cão ou do tutor, ou filtre por serviço. A coluna <b>Agenda fixa</b> mostra os dias e horários do adestramento.</li>
+          </ol>
+        </details>
+
 
         <sc-if value="{{showForm}}" hint-placeholder-val="{{false}}">
           <div class="card" style="padding:20px;display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:14px;align-items:end">
@@ -402,6 +446,16 @@
           </div>
           <button onClick="{{toggleSv}}" style="min-height:48px;padding:0 22px;border-radius:12px;border:0;background:{{accent}};color:#fff;font-size:16px;font-weight:700">{{svBtn}}</button>
         </div>
+        <details open style="background:#fff;border:1px solid #D8E2DF;border-radius:16px;padding:4px 20px">
+          <summary style="cursor:pointer;min-height:44px;display:flex;align-items:center;font-size:15px;font-weight:700;color:#0B5A53">Como usar: Serviços e preços</summary>
+          <ol style="margin:0 0 14px;padding-left:20px;display:flex;flex-direction:column;gap:8px;font-size:15px;line-height:1.5;color:#2A3F3B">
+<li>A lista mostra cada serviço, como ele é cobrado e o valor. Para mudar um preço, edite o valor direto no campo.</li>
+<li>Para criar um serviço, toque em <b>+ Novo serviço</b> e informe o nome, como cobra (por aula, por diária, pacote de dias ou extra com valor informado) e o valor.</li>
+<li>No <b>pacote de dias</b>, informe quantos dias ele tem. No <b>extra com valor informado</b>, não há preço fixo: o valor é digitado ao lançar o extra na tela Hoje.</li>
+<li><b>Remover</b> tira o serviço da lista. Na prévia, os valores desta tela ainda não alteram os extratos de exemplo.</li>
+          </ol>
+        </details>
+
         <sc-if value="{{hasSvMsg}}" hint-placeholder-val="{{false}}">
           <div role="status" style="background:#DDF1EE;color:#0B5A53;border-radius:12px;padding:12px 16px;font-size:14px;font-weight:600">{{svMsg}}</div>
         </sc-if>
@@ -457,6 +511,16 @@
           </div>
           <button onClick="{{doExport}}" class="btn">Exportar para Excel / Sheets</button>
         </div>
+        <details open style="background:#fff;border:1px solid #D8E2DF;border-radius:16px;padding:4px 20px">
+          <summary style="cursor:pointer;min-height:44px;display:flex;align-items:center;font-size:15px;font-weight:700;color:#0B5A53">Como usar: Dashboard</summary>
+          <ol style="margin:0 0 14px;padding-left:20px;display:flex;flex-direction:column;gap:8px;font-size:15px;line-height:1.5;color:#2A3F3B">
+<li>Escolha o período em <b>De</b> e <b>Até</b>, ou use os atalhos: Este mês, Mês passado, Últimos 90 dias e Tudo.</li>
+<li>Os cartões e gráficos mostram o total do período, os tutores atendidos, a média por tutor e o faturamento por serviço e por mês.</li>
+<li>Em <b>Detalhes do período</b>, veja cada lançamento (data, tutor, cão, serviço e valor) para conferir os números.</li>
+<li><b>Exportar para Excel / Sheets</b> leva o período escolhido para a planilha. Na prévia, o botão só mostra uma mensagem.</li>
+          </ol>
+        </details>
+
         <sc-if value="{{hasExMsg}}" hint-placeholder-val="{{false}}">
           <div role="status" style="background:#DDF1EE;color:#0B5A53;border-radius:12px;padding:12px 16px;font-size:14px;font-weight:600">{{exMsg}}</div>
         </sc-if>
@@ -537,6 +601,15 @@
             <span style="background:#DDF1EE;color:#0B5A53;font-weight:700;padding:8px 14px;border-radius:999px;font-size:14px">{{doneCount}} respondidas</span>
           </div>
         </div>
+        <details open style="background:#fff;border:1px solid #D8E2DF;border-radius:16px;padding:4px 20px">
+          <summary style="cursor:pointer;min-height:44px;display:flex;align-items:center;font-size:15px;font-weight:700;color:#0B5A53">Como usar: Dúvidas</summary>
+          <ol style="margin:0 0 14px;padding-left:20px;display:flex;flex-direction:column;gap:8px;font-size:15px;line-height:1.5;color:#2A3F3B">
+<li>Cada cartão é uma decisão que só o administrador pode tomar. Toque numa resposta rápida ou escreva a sua e toque em <b>Salvar resposta</b>.</li>
+<li>A dúvida respondida vai para o fim da lista. Use <b>Editar resposta</b> para reabrir.</li>
+<li>Para registrar uma pergunta nova, escreva no campo <b>Nova dúvida</b>, no fim da tela, e toque em <b>Adicionar dúvida</b>. O menu mostra quantas estão em aberto.</li>
+          </ol>
+        </details>
+
 
         <div style="display:flex;flex-direction:column;gap:12px">
           <sc-for list="{{duvidas}}" as="d" hint-placeholder-count="4">
