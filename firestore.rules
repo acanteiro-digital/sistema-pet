@@ -1,0 +1,25 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{db}/documents {
+    function ativo() {
+      return request.auth != null
+        && get(/databases/$(db)/documents/usuarios/$(request.auth.uid)).data.ativo == true;
+    }
+    function papel() {
+      return get(/databases/$(db)/documents/usuarios/$(request.auth.uid)).data.papel;
+    }
+    function admin() { return ativo() && papel() == 'admin'; }
+
+    match /usuarios/{id}  { allow read: if ativo(); allow write: if admin(); }
+    match /servicos/{id}  { allow read: if ativo(); allow write: if admin(); }
+    match /config/{id}    { allow read: if ativo(); allow write: if admin(); }
+    match /duvidas/{id}   { allow read: if ativo(); allow write: if admin(); }
+    match /fechamentos/{id} { allow read: if ativo(); allow write: if admin(); }
+
+    match /presencas/{id} { allow read, write: if ativo(); }
+    match /{col}/{id} {
+      allow read, write: if ativo() && papel() in ['admin', 'operador']
+        && col in ['tutores','caes','agendaFixa','agendamentos','pacotes','hotelReservas','lancamentos'];
+    }
+  }
+}
