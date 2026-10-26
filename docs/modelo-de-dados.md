@@ -35,6 +35,7 @@ Sem campo de porte: o preço não varia por porte.
 `nome`, `cobranca`: `"aula"` | `"diaria"` | `"pacote"` | `"extra"` (valor informado) | `"sessao"` (banho e tosa),
 `valor` (centavos, vazio quando `extra`), `diasPacote?`,
 `faixas?`: `[{ dias, valorTotal }]` (pacotes do hotel com desconto), `ativo`.
+Os pacotes do hotel não vêm pré-cadastrados: o administrador cria quantos quiser na tela Serviços e preços, com o tipo "Pacote de diárias (hotel)" (nome, número de diárias e valor total).
 
 ### `agendaFixa/{id}` (adestramento)
 `caoId`, `servicoId`, `diaSemana` (0–6), `hora` ("08:00" a "18:00", passo de 30 min), `ativo`.
@@ -97,7 +98,6 @@ Ver `firestore.rules`: só quem está em `usuarios` e ativo lê e grava; só `ad
 ## 6. Pontos ainda abertos
 
 - Falta de aula de adestramento: cobra ou não?
-- Preço e faixas do hotel (quantos pacotes e valores).
 - Banho e tosa: lista de profissionais.
 - Adestrador pode incluir aula extra? (hoje não; só administrador e operador)
 - O adestrador é uma pessoa ou várias?

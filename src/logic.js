@@ -381,11 +381,13 @@ class Component extends DCLogic {
 
     // ---- Serviços e preços
     const EXTRA = 'Extra (valor informado)';
-    const COB = ['Por aula', 'Por diária', 'Pacote de dias', EXTRA];
+    const PH = 'Pacote de diárias (hotel)';
+    const isPac = (c) => c === 'Pacote de dias' || c === PH;
+    const COB = ['Por aula', 'Por diária', 'Pacote de dias', PH, EXTRA];
     const setSv = (id, patch) => this.setState({ servicos: s.servicos.map((x) => (x.id === id ? { ...x, ...patch } : x)) });
     const svRows = s.servicos.map((x) => ({
       nome: x.nome, cob: x.cob, isExtra: x.cob === EXTRA, hasVal: x.cob !== EXTRA, valor: x.valor,
-      detalhe: x.cob === 'Pacote de dias' ? x.dias + ' dias' : (x.cob === 'Por aula' ? 'por aula dada' : (x.cob === 'Por diária' ? 'por diária' : 'digitado ao lançar')),
+      detalhe: isPac(x.cob) ? x.dias + (x.cob === PH ? ' diárias' : ' dias') : (x.cob === 'Por aula' ? 'por aula dada' : (x.cob === 'Por diária' ? 'por diária' : 'digitado ao lançar')),
       onVal: (e) => setSv(x.id, { valor: e.target.value }),
       remove: () => this.setState({ servicos: s.servicos.filter((y) => y.id !== x.id), svMsg: x.nome + ' removido.' })
     }));
@@ -396,9 +398,9 @@ class Component extends DCLogic {
       const dias = parseInt(n.dias, 10);
       if (!n.nome.trim()) { this.setState({ svMsg: 'Dê um nome ao serviço.' }); return; }
       if (n.cob !== EXTRA && !(v >= 0)) { this.setState({ svMsg: 'Informe o valor.' }); return; }
-      if (n.cob === 'Pacote de dias' && !(dias > 0)) { this.setState({ svMsg: 'Informe quantos dias tem o pacote.' }); return; }
+      if (isPac(n.cob) && !(dias > 0)) { this.setState({ svMsg: 'Informe quantos dias tem o pacote.' }); return; }
       this.setState({
-        servicos: [ ...s.servicos, { id: 's' + s.nS, nome: n.nome.trim(), cob: n.cob, valor: n.cob === EXTRA ? '' : String(n.valor), dias: n.cob === 'Pacote de dias' ? dias : null } ],
+        servicos: [ ...s.servicos, { id: 's' + s.nS, nome: n.nome.trim(), cob: n.cob, valor: n.cob === EXTRA ? '' : String(n.valor), dias: isPac(n.cob) ? dias : null } ],
         nS: s.nS + 1, nsv: { nome: '', cob: 'Por aula', valor: '', dias: '12' }, showSv: false, svMsg: 'Serviço cadastrado.'
       });
     };
@@ -483,7 +485,7 @@ class Component extends DCLogic {
       ci: s.ci, ciDogs: s.dogs.map((d) => ({ v: d.nome, l: d.nome })), ciBaias: [1, 2, 3, 4, 5, 6, 7, 8].map((b) => ({ v: String(b), l: 'Baia ' + b })),
       onCiDog: setCi('dog'), onCiData: setCi('data'), onCiDias: setCi('dias'), onCiBaia: setCi('baia'), onCiItens: setCi('itens'), doCheckIn: doCheckIn, hMsg: s.hMsg, hasHMsg: !!s.hMsg,
       svRows: svRows, showSv: s.showSv, svBtn: s.showSv ? 'Fechar' : '+ Novo serviço', toggleSv: () => this.setState({ showSv: !s.showSv }),
-      nsv: { ...s.nsv, hasVal: s.nsv.cob !== EXTRA, isPacote: s.nsv.cob === 'Pacote de dias' }, svCobOptions: COB.map((x) => ({ v: x, l: x })),
+      nsv: { ...s.nsv, hasVal: s.nsv.cob !== EXTRA, isPacote: isPac(s.nsv.cob) }, svCobOptions: COB.map((x) => ({ v: x, l: x })),
       onNsvNome: setNsv('nome'), onNsvCob: setNsv('cob'), onNsvValor: setNsv('valor'), onNsvDias: setNsv('dias'), saveSv: saveSv, svMsg: s.svMsg, hasSvMsg: !!s.svMsg,
       dfrom: s.dfrom, dto: s.dto, onFrom: (e) => this.setState({ dfrom: e.target.value }), onTo: (e) => this.setState({ dto: e.target.value }),
       dChips: dChips, kpis: kpis, srvBars: srvBars, monthBars: monthBars, detRows: detRows, noLanc: inRange.length === 0,
