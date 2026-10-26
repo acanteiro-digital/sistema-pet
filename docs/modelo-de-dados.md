@@ -90,6 +90,8 @@ A exportação Excel/Sheets usa: aba **Detalhes** = `lancamentos`; **Fechamento*
 
 ## 5. Segurança
 
+**Papel `adestrador` (decidido):** acesso limitado à tela Hoje. Vê só as aulas de adestramento do dia, marca Presente/Faltou e escreve como foi a aula. Não vê preços, lançamentos, fechamento, dashboard nem hotel. Os lançamentos da aula são criados por uma Cloud Function quando a presença é salva (ela roda com permissão própria), então o adestrador nunca grava valores.
+
 Ver `firestore.rules`: só quem está em `usuarios` e ativo lê e grava; só `admin` altera `servicos`, `usuarios`, `config` e dá baixa em `fechamentos`.
 
 ## 6. Pontos ainda abertos
@@ -97,4 +99,5 @@ Ver `firestore.rules`: só quem está em `usuarios` e ativo lê e grava; só `ad
 - Falta de aula de adestramento: cobra ou não?
 - Preço e faixas do hotel (quantos pacotes e valores).
 - Banho e tosa: lista de profissionais.
-- Quem tem papel `adestrador` pode só marcar presença e escrever a aula?
+- Adestrador pode incluir aula extra? (hoje não; só administrador e operador)
+- O adestrador é uma pessoa ou várias?

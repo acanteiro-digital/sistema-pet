@@ -11,12 +11,22 @@ service cloud.firestore {
     function admin() { return ativo() && papel() == 'admin'; }
 
     match /usuarios/{id}  { allow read: if ativo(); allow write: if admin(); }
-    match /servicos/{id}  { allow read: if ativo(); allow write: if admin(); }
+    match /servicos/{id}  { allow read: if ativo() && papel() != 'adestrador'; allow write: if admin(); }
     match /config/{id}    { allow read: if ativo(); allow write: if admin(); }
     match /duvidas/{id}   { allow read: if ativo(); allow write: if admin(); }
-    match /fechamentos/{id} { allow read: if ativo(); allow write: if admin(); }
+    match /fechamentos/{id} { allow read: if ativo() && papel() != 'adestrador'; allow write: if admin(); }
 
-    match /presencas/{id} { allow read, write: if ativo(); }
+    // Adestrador: só enxerga o necessário para a tela Hoje e marca presença/aula.
+    // Não lê valores (servicos, lancamentos, fechamentos já são restritos acima/abaixo).
+    match /caes/{id}       { allow read: if ativo() && papel() == 'adestrador'; }
+    match /agendaFixa/{id} { allow read: if ativo() && papel() == 'adestrador'; }
+    match /agendamentos/{id} { allow read: if ativo() && papel() == 'adestrador'; }
+    match /presencas/{id} {
+      allow read: if ativo();
+      allow create, update: if ativo()
+        && request.resource.data.keys().hasOnly(['data','caoId','status','faltaAvisada','itens','obs','marcadoPor','marcadoEm']);
+      allow delete: if admin();
+    }
     match /{col}/{id} {
       allow read, write: if ativo() && papel() in ['admin', 'operador']
         && col in ['tutores','caes','agendaFixa','agendamentos','pacotes','hotelReservas','lancamentos'];
