@@ -8,7 +8,7 @@ Versão 1 · baseada nas respostas da tela Dúvidas e no protótipo.
 |---|---|---|
 | 1 | Presença **uma vez só por dia** por cão | `presencas` tem 1 documento por cão e dia (id `AAAA-MM-DD_caoId`); os serviços do dia ficam dentro dele |
 | 2 | Day care é **diária avulsa** | serviço com `cobranca = "diaria"`, sem saldo |
-| 3 | Banho e tosa tem **agenda própria** (dia, hora, profissional) | coleção `agendamentos` |
+| 3 | Banho e tosa: resposta inicial foi agenda própria; **atualizado: por ora é um extra** com valor informado, sem profissional | lançado como extra (`cobranca = "extra"`); `agendamentos` fica só para aula extra |
 | 4 | Aula extra cobra o **mesmo valor** da fixa | extra usa o `valor` do serviço, sem preço separado |
 | 5 | Creche: falta **não desconta** se o tutor avisou | `presencas.faltaAvisada`; só falta sem aviso consome o pacote |
 | 6 | Hotel: **desconto por pacotes** de diárias | `servicos.faixas` (pacotes de N diárias com valor) |
@@ -32,7 +32,7 @@ Datas são `Timestamp`, exceto `data` e `competencia`, que são texto (`"2026-10
 Sem campo de porte: o preço não varia por porte.
 
 ### `servicos/{id}` (tela Serviços e preços)
-`nome`, `cobranca`: `"aula"` | `"diaria"` | `"pacote"` | `"extra"` (valor informado) | `"sessao"` (banho e tosa),
+`nome`, `cobranca`: `"aula"` | `"diaria"` | `"pacote"` | `"extra"` (valor informado; inclui banho e tosa, ração e guia),
 `valor` (centavos, vazio quando `extra`), `diasPacote?`,
 `faixas?`: `[{ dias, valorTotal }]` (pacotes do hotel com desconto), `ativo`.
 Os pacotes do hotel não vêm pré-cadastrados: o administrador cria quantos quiser na tela Serviços e preços, com o tipo "Pacote de diárias (hotel)" (nome, número de diárias e valor total).
@@ -41,8 +41,8 @@ Os pacotes do hotel não vêm pré-cadastrados: o administrador cria quantos qui
 `caoId`, `servicoId`, `diaSemana` (0–6), `hora` ("08:00" a "18:00", passo de 30 min), `ativo`.
 Um cão com dois dias na semana tem dois documentos.
 
-### `agendamentos/{id}` (banho e tosa e aulas extras)
-`data`, `hora`, `caoId`, `servicoId`, `profissional?`, `extra` (bool), `status` (`agendado` | `feito` | `cancelado`), `obs?`.
+### `agendamentos/{id}` (aulas extras)
+`data`, `hora`, `caoId`, `servicoId`, `extra` (bool), `status` (`agendado` | `feito` | `cancelado`), `obs?`.
 
 ### `presencas/{data_caoId}`
 `data`, `caoId`, `status` (`presente` | `faltou`), `faltaAvisada` (bool),
@@ -98,6 +98,6 @@ Ver `firestore.rules`: só quem está em `usuarios` e ativo lê e grava; só `ad
 ## 6. Pontos ainda abertos
 
 - Falta de aula de adestramento: cobra ou não?
-- Banho e tosa: lista de profissionais.
+- Banho e tosa com agenda e profissional: fica para uma versão futura, se o administrador quiser.
 - Adestrador pode incluir aula extra? (hoje não; só administrador e operador)
 - O adestrador é uma pessoa ou várias?
