@@ -60,7 +60,7 @@ const DOGS0 = [
 ];
 const fmt = (n) => 'R$ ' + Number(n).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 const isoDay = (d) => d.toISOString().slice(0, 10);
-const LANC = (() => {
+const LANC_ALL = (() => {
   const out = [];
   let nid = 1;
   const add = (data, tutor, cao, servico, desc, qtd, unit) => out.push({ id: nid++, data: data, tutor: tutor, cao: cao, servico: servico, desc: desc, qtd: qtd, valor: qtd * unit });
@@ -87,6 +87,9 @@ const LANC = (() => {
   [ ['2026-08-09', 'Renata Alves', 'Mel', 'Banho', 70], ['2026-08-22', 'Carlos Mendes', 'Thor', 'Guia', 45], ['2026-09-04', 'Paulo Souza', 'Nina', 'Ração', 30], ['2026-09-12', 'Sandra Dias', 'Max', 'Banho', 70], ['2026-09-28', 'Juliana Prado', 'Pipoca', 'Banho de saída', 80], ['2026-10-12', 'Sandra Dias', 'Max', 'Banho', 70], ['2026-10-17', 'Renata Alves', 'Mel', 'Banho', 70], ['2026-10-24', 'Carlos Mendes', 'Thor', 'Guia', 45] ].forEach((e) => add(e[0], e[1], e[2], 'Extras', e[3], 1, e[4]));
   return out;
 })();
+let _na = 0;
+const FALTAS = LANC_ALL.filter((l) => l.servico === 'Adestramento' && (_na++ % 7 === 3)).map((l) => ({ ...l, desc: 'Aula faltada (não cobrada)' }));
+const LANC = LANC_ALL.filter((l) => !(l.servico === 'Adestramento' && FALTAS.some((f) => f.id === l.id)));
 const SERV0 = [
   { id: 's1', nome: 'Adestramento', cob: 'Por aula', valor: '90', dias: null },
   { id: 's2', nome: 'Day care', cob: 'Por diária', valor: '80', dias: null },
@@ -116,6 +119,7 @@ class Component extends DCLogic {
     super(props);
     this.state = {
       screen: 'hoje',
+      cobrarFalta: false, faltaCob: {},
       day: 0, pres: { '0:d2': 'p', '0:d5': 'p' }, agenda: {}, nA: 10, adDog: 'Thor', adHora: '14:00', adFoco: '',
       notes: {},
       exDog: 'd1', exItem: 'Banho', exVal: '',
@@ -173,8 +177,12 @@ class Component extends DCLogic {
       ...adItems,
       ...TODAY.filter((r) => r.serv !== 'Adestramento')
     ];
+    const aulaSv = s.servicos.find((x) => x.nome === 'Adestramento');
+    const aulaVal = aulaSv ? Number(String(aulaSv.valor).replace(',', '.')) || 0 : 0;
     const rows = dayItems.map((r) => {
       const st = s.pres[s.day + ':' + r.id];
+      const fk = s.day + ':' + r.id;
+      const cobrada = s.faltaCob[fk] !== undefined ? s.faltaCob[fk] : s.cobrarFalta;
       const isC = r.serv === 'Creche';
       const dg = s.dogs.find((x) => x.nome === r.nome);
       const oth = dg ? dg.servs.filter((x) => x !== r.serv).join(', ') : '';
@@ -189,6 +197,11 @@ class Component extends DCLogic {
         note: s.notes[s.day + ':' + r.id] || '', noteId: 'nota-' + r.id,
         onNote: (e) => this.setState({ notes: { ...s.notes, [s.day + ':' + r.id]: e.target.value } }),
         onP: mark(r.id, 'p'), onF: mark(r.id, 'f'),
+        showFalta: r.serv === 'Adestramento' && st === 'f',
+        faltaTxt: cobrada ? 'Esta falta será cobrada: ' + fmt(aulaVal) : 'Falta não cobrada: deixa de faturar ' + fmt(aulaVal),
+        faltaBtn: cobrada ? 'Não cobrar' : 'Cobrar esta falta',
+        onFaltaCob: () => this.setState({ faltaCob: { ...s.faltaCob, [fk]: !cobrada } }),
+        faltaBox: 'display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;border-radius:12px;padding:10px 14px;font-size:14px;font-weight:600;' + (cobrada ? 'background:#DDF1EE;color:#0B5A53' : 'background:#FEF3C7;color:#8A4B08'),
         pStyle: st === 'p' ? 'min-height:48px;padding:0 20px;border-radius:12px;border:0;background:' + accent + ';color:#fff;font-size:15px;font-weight:700' : OFFBTN,
         fStyle: st === 'f' ? 'min-height:48px;padding:0 20px;border-radius:12px;border:0;background:#B42318;color:#fff;font-size:15px;font-weight:700' : OFFBTN
       };
@@ -326,6 +339,11 @@ class Component extends DCLogic {
 
     // ---- Dashboard
     const inRange = LANC.filter((l) => (!s.dfrom || l.data >= s.dfrom) && (!s.dto || l.data <= s.dto));
+    const faltasIn = FALTAS.filter((l) => (!s.dfrom || l.data >= s.dfrom) && (!s.dto || l.data <= s.dto));
+    const faltasTotal = faltasIn.reduce((a, l) => a + l.valor, 0);
+    const faltaPorCao = {};
+    faltasIn.forEach((l) => { const k = l.cao + ' · ' + l.tutor; faltaPorCao[k] = faltaPorCao[k] || { n: 0, v: 0 }; faltaPorCao[k].n += 1; faltaPorCao[k].v += l.valor; });
+    const faltaRows = Object.keys(faltaPorCao).sort((a, b) => faltaPorCao[b].v - faltaPorCao[a].v).map((k) => ({ quem: k, n: faltaPorCao[k].n + (faltaPorCao[k].n === 1 ? ' falta' : ' faltas'), v: fmt(faltaPorCao[k].v) }));
     const totalP = inRange.reduce((a, l) => a + l.valor, 0);
     const tutSet = {};
     inRange.forEach((l) => { tutSet[l.tutor] = true; });
@@ -347,7 +365,8 @@ class Component extends DCLogic {
       { label: 'Total no período', value: fmt(totalP) },
       { label: 'Tutores atendidos', value: String(nTut) },
       { label: 'Média por tutor', value: fmt(nTut ? totalP / nTut : 0) },
-      { label: 'Serviço líder', value: srvList.length ? srvList[0].k : '—' }
+      { label: 'Serviço líder', value: srvList.length ? srvList[0].k : '—' },
+      { label: 'Aulas faltadas (não cobradas)', value: faltasIn.length + (faltasIn.length === 1 ? ' aula · ' : ' aulas · ') + fmt(faltasTotal) }
     ];
     const srvBars = srvList.map((b, i) => ({ label: b.k, value: fmt(b.v), barStyle: 'display:block;height:22px;border-radius:6px;width:' + (b.v / srvMax * 100) + '%;background:' + (i === 0 ? accent : '#9DB8B3') }));
     const monthBars = mesKeys.map((k) => ({ label: MES_ABR[Number(k.slice(5, 7)) - 1] + '/' + k.slice(2, 4), value: fmt(byMes[k]).replace(',00', ''), barStyle: 'display:block;width:100%;max-width:56px;border-radius:6px 6px 0 0;height:' + Math.max(4, byMes[k] / mesMax * 120) + 'px;background:' + accent }));
@@ -488,6 +507,9 @@ class Component extends DCLogic {
       nsv: { ...s.nsv, hasVal: s.nsv.cob !== EXTRA, isPacote: isPac(s.nsv.cob) }, svCobOptions: COB.map((x) => ({ v: x, l: x })),
       onNsvNome: setNsv('nome'), onNsvCob: setNsv('cob'), onNsvValor: setNsv('valor'), onNsvDias: setNsv('dias'), saveSv: saveSv, svMsg: s.svMsg, hasSvMsg: !!s.svMsg,
       dfrom: s.dfrom, dto: s.dto, onFrom: (e) => this.setState({ dfrom: e.target.value }), onTo: (e) => this.setState({ dto: e.target.value }),
+      faltaRows: faltaRows, faltasCount: faltasIn.length + (faltasIn.length === 1 ? ' falta' : ' faltas'), faltasTotalTxt: fmt(faltasTotal), noFaltas: faltasIn.length === 0,
+      cobrarFaltaTxt: s.cobrarFalta ? 'Ligado: toda falta é cobrada' : 'Desligado: falta não é cobrada', onCobrarFalta: () => this.setState({ cobrarFalta: !s.cobrarFalta }),
+      cobrarFaltaStyle: s.cobrarFalta ? 'min-height:44px;padding:0 18px;border-radius:12px;border:0;background:' + accent + ';color:#fff;font-size:15px;font-weight:700' : OFFBTN,
       dChips: dChips, kpis: kpis, srvBars: srvBars, monthBars: monthBars, detRows: detRows, noLanc: inRange.length === 0,
       detCount: String(inRange.length), totalTxt: fmt(totalP), doExport: doExport, doExportFech: doExportFech, exMsg: s.exMsg, hasExMsg: !!s.exMsg,
       duvidas: duvidas, openCount: openCount, doneCount: s.duvidas.length - openCount,

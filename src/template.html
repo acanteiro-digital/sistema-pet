@@ -41,6 +41,7 @@
 <li>Use as setas <b>Anterior</b> e <b>Próximo</b> para escolher o dia. Cada dia mostra os cães com aula de adestramento agendada (dia e hora fixos do cadastro), mais o day care e a creche.</li>
 <li>Em cada cão, toque em <b>Presente</b> ou <b>Faltou</b>. Tocar de novo desfaz a marcação.</li>
 <li>Nas aulas de adestramento, escreva em <b>Como foi a aula</b> a observação do dia. Ela substitui o texto que o adestrador enviava.</li>
+<li>Se o cão <b>faltou</b> numa aula de adestramento, aparece um aviso: por padrão a falta não é cobrada. Toque em <b>Cobrar esta falta</b> para cobrar só aquela aula (ou ligue a cobrança geral em Serviços e preços).</li>
 <li>Aula extra no mesmo dia: no quadro <b>Aula extra neste dia</b>, escolha o cão, o horário e o foco e toque em <b>Incluir aula extra</b>. Ela entra na lista com a etiqueta Extra.</li>
 <li>Extras (ração, guia, banho): em <b>Lançar extra</b>, escolha o cão e o item, digite o valor e toque em <b>Adicionar extra</b>. Eles entram no fechamento do mês.</li>
 <li>Na creche, cada presença desconta um dia do pacote, e o sistema avisa quando o pacote está acabando.</li>
@@ -89,6 +90,12 @@
                     <button onClick="{{r.onF}}" style="{{r.fStyle}}">Faltou</button>
                   </div>
                 </div>
+                <sc-if value="{{r.showFalta}}" hint-placeholder-val="{{false}}">
+                  <div style="{{r.faltaBox}}">
+                    <span>{{r.faltaTxt}}</span>
+                    <button onClick="{{r.onFaltaCob}}" class="btn">{{r.faltaBtn}}</button>
+                  </div>
+                </sc-if>
                 <sc-if value="{{r.isAdest}}" hint-placeholder-val="{{false}}">
                   <div>
                     <label class="lbl" for="{{r.noteId}}">Como foi a aula · observação (substitui o texto diário)</label>
@@ -453,6 +460,7 @@
 <li>Para criar um serviço, toque em <b>+ Novo serviço</b> e informe o nome, como cobra (por aula, por diária, pacote de dias ou extra com valor informado) e o valor.</li>
 <li><b>Pacotes do hotel</b> (estadias com desconto): crie um serviço do tipo <b>Pacote de diárias (hotel)</b>, com o nome (ex.: Hotel · pacote 7 diárias), o número de diárias e o valor total. Você cria quantos pacotes quiser e pode mudar ou remover quando quiser.</li>
 <li>No <b>pacote de dias</b>, informe quantos dias ele tem. No <b>extra com valor informado</b>, não há preço fixo: o valor é digitado ao lançar o extra na tela Hoje.</li>
+<li>Em <b>Cobrar falta em aula de adestramento</b>, escolha se toda falta é cobrada. O padrão é não cobrar.</li>
 <li><b>Remover</b> tira o serviço da lista. Na prévia, os valores desta tela ainda não alteram os extratos de exemplo.</li>
           </ol>
         </details>
@@ -479,6 +487,14 @@
             <button onClick="{{saveSv}}" style="min-height:48px;border-radius:12px;border:0;background:#14312D;color:#fff;font-size:16px;font-weight:700">Salvar serviço</button>
           </div>
         </sc-if>
+
+        <div class="card" style="padding:16px 20px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px">
+          <div style="flex:1 1 320px">
+            <div style="font-size:16px;font-weight:800">Cobrar falta em aula de adestramento</div>
+            <div style="font-size:14px;color:#5B6F6B;margin-top:4px;line-height:1.5">Hoje a falta não é cobrada. Ligando aqui, toda falta passa a ser cobrada pelo valor da aula. Mesmo desligado, você pode cobrar uma falta específica na tela Hoje.</div>
+          </div>
+          <button onClick="{{onCobrarFalta}}" style="{{cobrarFaltaStyle}}">{{cobrarFaltaTxt}}</button>
+        </div>
 
         <div class="card" style="padding:16px">
           <div style="overflow-x:auto">
@@ -519,6 +535,7 @@
 <li>Escolha o período em <b>De</b> e <b>Até</b>, ou use os atalhos: Este mês, Mês passado, Últimos 90 dias e Tudo.</li>
 <li>Os cartões e gráficos mostram o total do período, os tutores atendidos, a média por tutor e o faturamento por serviço e por mês.</li>
 <li>Em <b>Detalhes do período</b>, veja cada lançamento (data, tutor, cão, serviço e valor) para conferir os números.</li>
+<li>Em <b>Faltas em aula de adestramento</b>, veja quantas aulas foram faltadas no período e quanto isso representa de faturamento que não foi cobrado, por cão.</li>
 <li><b>Exportar para Excel / Sheets</b> leva o período escolhido para a planilha. Na prévia, o botão só mostra uma mensagem.</li>
           </ol>
         </details>
@@ -569,6 +586,22 @@
                 </div>
               </sc-for>
             </div>
+          </div>
+        </div>
+
+        <div class="card" style="padding:20px">
+          <div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;align-items:baseline">
+            <div style="font-size:18px;font-weight:800">Faltas em aula de adestramento</div>
+            <div style="font-size:14px;color:#5B6F6B">{{faltasCount}} · deixou de faturar {{faltasTotalTxt}}</div>
+          </div>
+          <div style="font-size:14px;color:#5B6F6B;margin-top:6px">Por padrão a falta não é cobrada. Este quadro mostra quanto isso representa no período e quais cães mais faltaram.</div>
+          <sc-if value="{{noFaltas}}" hint-placeholder-val="{{false}}"><div style="color:#5B6F6B;font-size:15px;margin-top:12px">Nenhuma falta neste período.</div></sc-if>
+          <div style="display:flex;flex-direction:column;margin-top:8px">
+            <sc-for list="{{faltaRows}}" as="f" hint-placeholder-count="3">
+              <div style="display:grid;grid-template-columns:1fr 90px 110px;gap:10px;padding:10px 4px;border-bottom:1px solid #E8EEEC;font-size:15px;align-items:center">
+                <span>{{f.quem}}</span><span style="text-align:right;color:#5B6F6B">{{f.n}}</span><span style="text-align:right;font-weight:700">{{f.v}}</span>
+              </div>
+            </sc-for>
           </div>
         </div>
 

@@ -14,6 +14,7 @@ Versão 1 · baseada nas respostas da tela Dúvidas e no protótipo.
 | 6 | Hotel: **desconto por pacotes** de diárias | `servicos.faixas` (pacotes de N diárias com valor) |
 | 7 | Vacina vencida **bloqueia entrada** (creche, day care, hotel) | `caes.vacinaValidaAte`, checado no check-in e na presença |
 | 8 | Pagamento **Pix, baixa manual** | `fechamentos.status` e `pagoEm`, sem integração bancária |
+| 10 | Falta em aula de adestramento **não é cobrada por padrão**, com opção de cobrar | `config/app.cobrarFaltaAula` (padrão falso) e `presencas.faltaCobrada` por falta; o Dashboard soma o que deixou de ser faturado |
 | 9 | Cobrança **pelo WhatsApp do tutor** | `tutores.whatsapp` (só dígitos, com 55) e `fechamentos.enviadoEm` |
 
 ## 2. Coleções
@@ -45,7 +46,7 @@ Um cão com dois dias na semana tem dois documentos.
 `data`, `hora`, `caoId`, `servicoId`, `extra` (bool), `status` (`agendado` | `feito` | `cancelado`), `obs?`.
 
 ### `presencas/{data_caoId}`
-`data`, `caoId`, `status` (`presente` | `faltou`), `faltaAvisada` (bool),
+`data`, `caoId`, `status` (`presente` | `faltou`), `faltaAvisada` (bool), `faltaCobrada` (bool; em aula de adestramento, vem de `config/app.cobrarFaltaAula` e pode ser mudada por falta),
 `itens`: `[{ servicoId, origem: "agendaFixa"|"agendamento"|"avulso", origemId?, obs? }]`,
 `obs?` (texto da aula, substitui a mensagem do adestrador), `marcadoPor`, `marcadoEm`.
 Ao salvar, o sistema cria ou atualiza os `lancamentos` do dia.
@@ -70,7 +71,7 @@ Extras (ração, guia, banho) entram aqui com valor digitado pelo administrador.
 Os lançamentos do mês apontam para ele por `fechamentoId`.
 
 ### `config/app`
-`diaVencimento` (10), `horaInicio` ("08:00"), `horaFim` ("18:00"), `passoMinutos` (30), `modeloMensagemWhatsapp`.
+`diaVencimento` (10), `cobrarFaltaAula` (false), `horaInicio` ("08:00"), `horaFim` ("18:00"), `passoMinutos` (30), `modeloMensagemWhatsapp`.
 
 ### `duvidas/{id}`
 `pergunta`, `resposta`, `respondidaPor`, `respondidaEm`. Guarda o histórico das decisões da seção 1.
@@ -79,10 +80,22 @@ Os lançamentos do mês apontam para ele por `fechamentoId`.
 
 1. **Vacina**: ao registrar presença de creche/day care ou check-in do hotel, se `vacinaValidaAte` < data, bloquear e avisar.
 2. **Presença**: gera um lançamento por item (aula, diária de day care, banho). Item de creche consome o pacote; se não há pacote ativo, avisar.
-3. **Falta**: aula faltada segue a regra do administrador (confirmar se cobra); creche só consome o pacote se `faltaAvisada = false`.
+3. **Falta**: aula de adestramento faltada não gera lançamento, a menos que `faltaCobrada = true` (então cobra o valor da aula); a falta não cobrada é guardada para o relatório "deixou de faturar"; creche só consome o pacote se `faltaAvisada = false`.
 4. **Hotel**: no check-out, `diarias` = dias entre `checkInEm` e `checkOutEm`; aplica a melhor `faixa` do serviço e cria o lançamento.
 5. **Fechamento (dia 1 a 3)**: soma os lançamentos da competência por tutor, cria o documento, gera o link `https://wa.me/55…?text=…`.
 6. **Baixa**: botão Marcar como pago grava `status = pago`, `pagoEm` e `baixaPor`.
+
+## 3.1 Faltas não cobradas (relatório)
+
+Cada falta em aula de adestramento com `faltaCobrada = false` conta como valor não faturado: `valor da aula × número de faltas`. O Dashboard mostra, no período filtrado, o total e o ranking por cão e tutor. Consulta: `presencas` com `status = "faltou"`, `faltaCobrada = false` e item de adestramento, por `data`.
+
+## 3.2 Leva e traz (proposta, ainda sem cobrança definida)
+
+Recomendação: **valor por zona de distância**, cobrado **por dia em que o transporte foi realizado**, com opção de **mensalidade fixa por zona** para cães com rotina fixa.
+- `servicos`: tipo `"transporte"`, com `faixas: [{ zona, valorTrecho, valorMensal? }]` (o administrador define as zonas e valores).
+- `caes.levaTraz`: `{ ativo, zona, trechos: "ida" | "volta" | "ida_e_volta" }`.
+- Na tela Hoje, o cão com leva e traz mostra uma marca para confirmar o transporte do dia. Se o cão foi (presente), gera o lançamento do transporte; se faltou com aviso, não cobra.
+- Quem tem mensalidade recebe um lançamento fixo no fechamento, sem lançamentos diários.
 
 ## 4. Índices e exportação
 
@@ -97,7 +110,7 @@ Ver `firestore.rules`: só quem está em `usuarios` e ativo lê e grava; só `ad
 
 ## 6. Pontos ainda abertos
 
-- Falta de aula de adestramento: cobra ou não?
 - Banho e tosa com agenda e profissional: fica para uma versão futura, se o administrador quiser.
+- Leva e traz: quantas zonas, quais valores, e se vale mensalidade fixa, valor por dia ou os dois.
 - Adestrador pode incluir aula extra? (hoje não; só administrador e operador)
 - O adestrador é uma pessoa ou várias?
